@@ -24,8 +24,17 @@ const resultConfidence = document.getElementById('resultConfidence');
 const resultBody = document.getElementById('resultBody');
 const resultInsights = document.getElementById('resultInsights');
 
+// Validate required DOM elements exist
+if (!emailInput || !parseBtn || !clearBtn || !exampleBtn || !resultsSection ||
+    !copyJsonBtn || !copyTextBtn || !resultFrom || !resultSubject || !resultTicketId ||
+    !resultCategory || !resultPriority || !resultConfidence || !resultBody || !resultInsights) {
+    console.error('Required DOM elements not found');
+    throw new Error('Failed to initialize: missing required DOM elements');
+}
+
 // Current parsed result
 let currentResult = null;
+let parseTimeout = null;
 
 // Example email
 const EXAMPLE_EMAIL = `From: sarah.johnson@techcorp.com
@@ -130,8 +139,17 @@ function clearForm() {
 function loadExample() {
     emailInput.value = EXAMPLE_EMAIL;
     emailInput.focus();
+
+    // Clear any pending parse to prevent race condition
+    if (parseTimeout) {
+        clearTimeout(parseTimeout);
+    }
+
     // Auto-parse after loading
-    setTimeout(parseEmail, 500);
+    parseTimeout = setTimeout(() => {
+        parseEmail();
+        parseTimeout = null;
+    }, 500);
 }
 
 /**

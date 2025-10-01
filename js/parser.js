@@ -54,6 +54,9 @@ class EmailParser {
         if (!emailText || emailText.trim().length === 0) {
             throw new Error('Email text cannot be empty');
         }
+        if (emailText.length > 100000) {
+            throw new Error('Email text too large (max 100KB)');
+        }
 
         const from = this.extractFrom(emailText);
         const subject = this.extractSubject(emailText);
@@ -81,11 +84,11 @@ class EmailParser {
      * Extract sender email
      */
     extractFrom(text) {
-        // Try various email patterns
+        // Try various email patterns (RFC-compliant)
         const patterns = [
             /From:\s*([^\n<]+(?:<[^>]+>)?)/i,
             /Sender:\s*([^\n<]+(?:<[^>]+>)?)/i,
-            /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/
+            /([a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*)/
         ];
 
         for (const pattern of patterns) {
@@ -143,12 +146,12 @@ class EmailParser {
 
         const body = lines.slice(bodyStart).join('\n').trim();
 
-        // Remove common email signatures
+        // Remove common email signatures (with limited lookahead to prevent ReDoS)
         const withoutSignature = body
-            .replace(/--\s*\n[\s\S]*$/, '')  // -- signature
-            .replace(/Best regards[\s\S]*$/i, '')
-            .replace(/Thanks[\s\S]*$/i, '')
-            .replace(/Sent from my [\s\S]*$/i, '');
+            .replace(/--\s*\n[\s\S]{0,1000}?$/, '')  // -- signature (limited)
+            .replace(/Best regards[\s\S]{0,500}?$/i, '')  // Limited with non-greedy
+            .replace(/Thanks[\s\S]{0,500}?$/i, '')
+            .replace(/Sent from my [\s\S]{0,200}?$/i, '');
 
         return withoutSignature.trim() || body;
     }
@@ -222,7 +225,9 @@ class EmailParser {
      * Format category name for display
      */
     formatCategoryName(name) {
-        return name
+        // Sanitize to prevent XSS
+        const sanitized = name.replace(/[<>&"']/g, '');
+        return sanitized
             .split('_')
             .map(word => word.charAt(0).toUpperCase() + word.slice(1))
             .join(' ');
