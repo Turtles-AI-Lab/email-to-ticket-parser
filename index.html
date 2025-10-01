@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free email to support ticket parser. Automatically extract ticket information, categorize issues, and determine priority from support emails.">
+    <meta name="keywords" content="email parser, ticket parser, support ticket, helpdesk, IT support, email to ticket">
+    <title>Email-to-Ticket Parser | Free Support Email Analyzer</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1>📧 Email-to-Ticket Parser</h1>
+        <p class="subtitle">Automatically extract ticket information from support emails</p>
+        <div class="header-links">
+            <a href="https://github.com/Turtles-AI-Lab/email-to-ticket-parser" class="github-link" target="_blank">⭐ Star on GitHub</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- How It Works -->
+        <section class="info-section">
+            <h2>🎯 How It Works</h2>
+            <div class="features-grid">
+                <div class="feature">
+                    <span class="feature-icon">1️⃣</span>
+                    <h3>Paste Email</h3>
+                    <p>Copy and paste any support email below</p>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">2️⃣</span>
+                    <h3>AI Analysis</h3>
+                    <p>Our AI extracts key information and categorizes the issue</p>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">3️⃣</span>
+                    <h3>Get Results</h3>
+                    <p>View structured ticket data ready for your helpdesk system</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Email Input -->
+        <section class="parser-section">
+            <h2>📝 Paste Your Email</h2>
+            <textarea id="emailInput" placeholder="Paste the support email here...
+
+Example:
+From: john.doe@company.com
+Subject: Cannot access my account
+
+Hi Support,
+
+I've been trying to log into my account all morning but keep getting an error message saying my password is incorrect. I've tried resetting it twice already but I'm still locked out. This is urgent as I need to access our client files.
+
+Can you help?
+
+Thanks,
+John"></textarea>
+
+            <div class="button-group">
+                <button id="parseBtn" class="primary-btn">🔍 Parse Email</button>
+                <button id="clearBtn" class="secondary-btn">🗑️ Clear</button>
+                <button id="exampleBtn" class="secondary-btn">💡 Load Example</button>
+            </div>
+        </section>
+
+        <!-- Results -->
+        <section id="resultsSection" class="results-section" style="display: none;">
+            <h2>✅ Parsed Ticket Information</h2>
+
+            <div class="results-grid">
+                <div class="result-card">
+                    <h3>📋 Basic Info</h3>
+                    <div class="result-item">
+                        <span class="label">From:</span>
+                        <span id="resultFrom" class="value"></span>
+                    </div>
+                    <div class="result-item">
+                        <span class="label">Subject:</span>
+                        <span id="resultSubject" class="value"></span>
+                    </div>
+                    <div class="result-item">
+                        <span class="label">Ticket ID:</span>
+                        <span id="resultTicketId" class="value"></span>
+                    </div>
+                </div>
+
+                <div class="result-card">
+                    <h3>🎯 Classification</h3>
+                    <div class="result-item">
+                        <span class="label">Category:</span>
+                        <span id="resultCategory" class="value badge"></span>
+                    </div>
+                    <div class="result-item">
+                        <span class="label">Priority:</span>
+                        <span id="resultPriority" class="value badge"></span>
+                    </div>
+                    <div class="result-item">
+                        <span class="label">Confidence:</span>
+                        <span id="resultConfidence" class="value"></span>
+                    </div>
+                </div>
+
+                <div class="result-card full-width">
+                    <h3>💬 Issue Description</h3>
+                    <div id="resultBody" class="description-box"></div>
+                </div>
+
+                <div class="result-card full-width">
+                    <h3>🤖 AI Insights</h3>
+                    <div id="resultInsights" class="insights-box"></div>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button id="copyJsonBtn" class="primary-btn">📋 Copy as JSON</button>
+                <button id="copyTextBtn" class="secondary-btn">📄 Copy as Text</button>
+            </div>
+        </section>
+
+        <!-- Related Tools -->
+        <section class="related-tools">
+            <h2>🛠️ Related Tools</h2>
+            <div class="tools-grid">
+                <a href="https://github.com/Turtles-AI-Lab/ai-ticket-classifier" class="tool-card" target="_blank">
+                    <h3>🎯 AI Ticket Classifier</h3>
+                    <p>Python library for classifying support tickets</p>
+                </a>
+                <a href="https://github.com/Turtles-AI-Lab/llm-cost-calculator" class="tool-card" target="_blank">
+                    <h3>💰 LLM Cost Calculator</h3>
+                    <p>Compare AI API costs across providers</p>
+                </a>
+                <a href="https://github.com/Turtles-AI-Lab/TicketZero-Atera-Edition" class="tool-card" target="_blank">
+                    <h3>🤖 TicketZero AI</h3>
+                    <p>Automated ticket resolution for MSPs</p>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Built by <a href="https://github.com/Turtles-AI-Lab" target="_blank">Turtles AI Lab</a></p>
+        <p>Free & Open Source | <a href="mailto:jgreenia@jandraisolutions.com">Contact</a></p>
+        <p class="badge-container">
+            <img src="https://komarev.com/ghpvc/?username=email-to-ticket-parser&color=blue&style=flat-square&label=Visitors" alt="Visitor count">
+        </p>
+    </footer>
+
+    <script src="js/parser.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
