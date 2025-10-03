@@ -36,6 +36,26 @@ if (!emailInput || !parseBtn || !clearBtn || !exampleBtn || !resultsSection ||
 let currentResult = null;
 let parseTimeout = null;
 
+// Rate limiting
+const rateLimiter = {
+    attempts: [],
+    maxAttempts: 10,
+    windowMs: 60000, // 1 minute
+
+    checkLimit() {
+        const now = Date.now();
+        // Remove attempts older than the window
+        this.attempts = this.attempts.filter(time => now - time < this.windowMs);
+
+        if (this.attempts.length >= this.maxAttempts) {
+            return false; // Rate limit exceeded
+        }
+
+        this.attempts.push(now);
+        return true; // Allow request
+    }
+};
+
 // Example email
 const EXAMPLE_EMAIL = `From: sarah.johnson@techcorp.com
 Subject: URGENT - Cannot access shared drive
@@ -82,6 +102,12 @@ function parseEmail() {
         return;
     }
 
+    // Check rate limit
+    if (!rateLimiter.checkLimit()) {
+        showError('Too many requests. Please wait a moment before trying again.');
+        return;
+    }
+
     try {
         // Parse email
         currentResult = parser.parse(emailText);
@@ -102,25 +128,37 @@ function parseEmail() {
  * Display parsed results
  */
 function displayResults(result) {
-    // Basic info
-    resultFrom.textContent = result.from;
-    resultSubject.textContent = result.subject;
-    resultTicketId.textContent = result.ticketId;
+    // Sanitize all user inputs to prevent XSS
+    // Using textContent already provides protection, but validate data types
+    resultFrom.textContent = sanitizeOutput(result.from);
+    resultSubject.textContent = sanitizeOutput(result.subject);
+    resultTicketId.textContent = sanitizeOutput(result.ticketId);
 
     // Classification
-    resultCategory.textContent = result.categoryLabel;
+    resultCategory.textContent = sanitizeOutput(result.categoryLabel);
     resultCategory.className = 'value badge';
 
-    resultPriority.textContent = result.priority.toUpperCase();
-    resultPriority.className = `value badge ${result.priority}`;
+    // Validate priority is one of expected values
+    const validPriorities = ['low', 'medium', 'high', 'urgent'];
+    const safePriority = validPriorities.includes(result.priority) ? result.priority : 'medium';
+    resultPriority.textContent = safePriority.toUpperCase();
+    resultPriority.className = `value badge ${safePriority}`;
 
     resultConfidence.textContent = `${(result.confidence * 100).toFixed(0)}%`;
 
     // Description
-    resultBody.textContent = result.body;
+    resultBody.textContent = sanitizeOutput(result.body);
 
     // Insights
-    resultInsights.textContent = result.insights;
+    resultInsights.textContent = sanitizeOutput(result.insights);
+}
+
+/**
+ * Sanitize output for display
+ */
+function sanitizeOutput(text) {
+    if (!text) return '';
+    return String(text).substring(0, 10000); // Limit length to prevent DOM bloat
 }
 
 /**
@@ -182,19 +220,55 @@ function copyAsText() {
  * Copy text to clipboard
  */
 function copyToClipboard(text, successMessage) {
-    navigator.clipboard.writeText(text).then(() => {
-        showSuccess(successMessage);
-    }).catch((err) => {
+    // Try modern Clipboard API first
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+            showSuccess(successMessage);
+        }).catch((err) => {
+            // Fallback to legacy method if clipboard API fails
+            fallbackCopyToClipboard(text, successMessage);
+        });
+    } else {
+        // Use fallback for older browsers
+        fallbackCopyToClipboard(text, successMessage);
+    }
+}
+
+/**
+ * Fallback clipboard copy for older browsers
+ */
+function fallbackCopyToClipboard(text, successMessage) {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-999999px';
+    textArea.style.top = '-999999px';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+            showSuccess(successMessage);
+        } else {
+            showError('Failed to copy to clipboard');
+        }
+    } catch (err) {
         showError('Failed to copy: ' + err.message);
-    });
+    } finally {
+        document.body.removeChild(textArea);
+    }
 }
 
 /**
  * Show error message
  */
 function showError(message) {
+    // Sanitize error message to prevent information leakage
+    const safeMessage = String(message).substring(0, 200);
     // Simple alert for now - can be enhanced with toast notifications
-    alert('❌ ' + message);
+    alert('❌ ' + safeMessage);
 }
 
 /**

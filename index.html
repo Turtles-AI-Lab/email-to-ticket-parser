@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Free email to support ticket parser. Automatically extract ticket information, categorize issues, and determine priority from support emails.">
     <meta name="keywords" content="email parser, ticket parser, support ticket, helpdesk, IT support, email to ticket">
+
+    <!-- Security Headers -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https://komarev.com data:; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';">
+
     <title>Email-to-Ticket Parser | Free Support Email Analyzer</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -13,7 +21,7 @@
         <h1>📧 Email-to-Ticket Parser</h1>
         <p class="subtitle">Automatically extract ticket information from support emails</p>
         <div class="header-links">
-            <a href="https://github.com/Turtles-AI-Lab/email-to-ticket-parser" class="github-link" target="_blank">⭐ Star on GitHub</a>
+            <a href="https://github.com/Turtles-AI-Lab/email-to-ticket-parser" class="github-link" target="_blank" rel="noopener noreferrer">⭐ Star on GitHub</a>
         </div>
     </header>
 
@@ -43,7 +51,10 @@
         <!-- Email Input -->
         <section class="parser-section">
             <h2>📝 Paste Your Email</h2>
-            <textarea id="emailInput" placeholder="Paste the support email here...
+            <textarea id="emailInput"
+                aria-label="Email text input for parsing"
+                aria-describedby="emailInputHelp"
+                placeholder="Paste the support email here...
 
 Example:
 From: john.doe@company.com
@@ -57,11 +68,12 @@ Can you help?
 
 Thanks,
 John"></textarea>
+            <div id="emailInputHelp" class="sr-only">Enter the email text you want to parse into a support ticket. You can use Ctrl+Enter to submit.</div>
 
             <div class="button-group">
-                <button id="parseBtn" class="primary-btn">🔍 Parse Email</button>
-                <button id="clearBtn" class="secondary-btn">🗑️ Clear</button>
-                <button id="exampleBtn" class="secondary-btn">💡 Load Example</button>
+                <button id="parseBtn" class="primary-btn" aria-label="Parse the email and extract ticket information">🔍 Parse Email</button>
+                <button id="clearBtn" class="secondary-btn" aria-label="Clear the email input field">🗑️ Clear</button>
+                <button id="exampleBtn" class="secondary-btn" aria-label="Load an example email">💡 Load Example</button>
             </div>
         </section>
 
@@ -114,8 +126,8 @@ John"></textarea>
             </div>
 
             <div class="button-group">
-                <button id="copyJsonBtn" class="primary-btn">📋 Copy as JSON</button>
-                <button id="copyTextBtn" class="secondary-btn">📄 Copy as Text</button>
+                <button id="copyJsonBtn" class="primary-btn" aria-label="Copy results as JSON format">📋 Copy as JSON</button>
+                <button id="copyTextBtn" class="secondary-btn" aria-label="Copy results as plain text format">📄 Copy as Text</button>
             </div>
         </section>
 
@@ -123,15 +135,15 @@ John"></textarea>
         <section class="related-tools">
             <h2>🛠️ Related Tools</h2>
             <div class="tools-grid">
-                <a href="https://github.com/Turtles-AI-Lab/ai-ticket-classifier" class="tool-card" target="_blank">
+                <a href="https://github.com/Turtles-AI-Lab/ai-ticket-classifier" class="tool-card" target="_blank" rel="noopener noreferrer">
                     <h3>🎯 AI Ticket Classifier</h3>
                     <p>Python library for classifying support tickets</p>
                 </a>
-                <a href="https://github.com/Turtles-AI-Lab/llm-cost-calculator" class="tool-card" target="_blank">
+                <a href="https://github.com/Turtles-AI-Lab/llm-cost-calculator" class="tool-card" target="_blank" rel="noopener noreferrer">
                     <h3>💰 LLM Cost Calculator</h3>
                     <p>Compare AI API costs across providers</p>
                 </a>
-                <a href="https://github.com/Turtles-AI-Lab/TicketZero-Atera-Edition" class="tool-card" target="_blank">
+                <a href="https://github.com/Turtles-AI-Lab/TicketZero-Atera-Edition" class="tool-card" target="_blank" rel="noopener noreferrer">
                     <h3>🤖 TicketZero AI</h3>
                     <p>Automated ticket resolution for MSPs</p>
                 </a>
@@ -140,7 +152,7 @@ John"></textarea>
     </main>
 
     <footer>
-        <p>Built by <a href="https://github.com/Turtles-AI-Lab" target="_blank">Turtles AI Lab</a></p>
+        <p>Built by <a href="https://github.com/Turtles-AI-Lab" target="_blank" rel="noopener noreferrer">Turtles AI Lab</a></p>
         <p>Free & Open Source | <a href="mailto:jgreenia@jandraisolutions.com">Contact</a></p>
         <p class="badge-container">
             <img src="https://komarev.com/ghpvc/?username=email-to-ticket-parser&color=blue&style=flat-square&label=Visitors" alt="Visitor count">
