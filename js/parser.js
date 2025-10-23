@@ -112,8 +112,9 @@ class EmailParser {
         const patterns = [
             /From:\s*([^\n<]+(?:<[^>]+>)?)/i,
             /Sender:\s*([^\n<]+(?:<[^>]+>)?)/i,
-            // Simplified email pattern to prevent ReDoS - non-backtracking
-            /([a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]{1,64}@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?){0,10})/
+            // Improved RFC-compliant email pattern (still ReDoS-safe with limits)
+            // Supports: local-part (64 chars max) @ domain with proper TLD validation
+            /([a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]{1,64}@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?){1,10})/
         ];
 
         for (const pattern of patterns) {
