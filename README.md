@@ -1,5 +1,13 @@
 # 📧 Email-to-Ticket Parser
 
+
+![GitHub stars](https://img.shields.io/github/stars/Turtles-AI-Lab/email-to-ticket-parser?style=social)
+![GitHub forks](https://img.shields.io/github/forks/Turtles-AI-Lab/email-to-ticket-parser?style=social)
+![GitHub issues](https://img.shields.io/github/issues/Turtles-AI-Lab/email-to-ticket-parser)
+![GitHub license](https://img.shields.io/github/license/Turtles-AI-Lab/email-to-ticket-parser)
+![GitHub last commit](https://img.shields.io/github/last-commit/Turtles-AI-Lab/email-to-ticket-parser)
+
+
 **Free web-based tool to automatically extract and structure support ticket information from emails.**
 
 [![Visitors](https://komarev.com/ghpvc/?username=email-to-ticket-parser&color=blue&style=flat-square&label=Visitors)](https://github.com/Turtles-AI-Lab/email-to-ticket-parser)
